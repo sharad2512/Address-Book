@@ -1,9 +1,15 @@
 package com.addressbook;
+
 import java.util.Scanner;
+
 public class AddressBook {
     Scanner scanner = new Scanner(System.in);
-    public void createContact() {
+    Contact[] contactList = new Contact[1];
+    static int i = 0;
+
+    public void addContact() {
         Contact contact = new Contact();
+        System.out.println("Add new contact please provide below information");
         System.out.println("Enter Your First Name");
         String firstName = scanner.next();
         contact.setFirstname(firstName);
@@ -28,6 +34,12 @@ public class AddressBook {
         System.out.println("Enter Your Email Address");
         String email = scanner.next();
         contact.setEmail(email);
-        System.out.println(contact);
+        contactList[i] = contact;
+    }
+
+    public void printContacts() {
+        for (int j = 0; j < contactList.length; j++) {
+            System.out.println(contactList[0]);
+        }
     }
 }
