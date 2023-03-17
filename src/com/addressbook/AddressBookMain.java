@@ -22,6 +22,9 @@ public class AddressBookMain {
                 case 3:
                     addressBook.editContact();
                     break;
+                case 4:
+                    addressBook.deleteContact();
+                    break;
 
             }
             System.out.println("Press 'y' to continue else press 'n'");
@@ -29,4 +32,3 @@ public class AddressBookMain {
         }
     }
 }
-
