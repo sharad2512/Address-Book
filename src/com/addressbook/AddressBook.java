@@ -35,11 +35,54 @@ public class AddressBook {
         String email = scanner.next();
         contact.setEmail(email);
         contactList[i] = contact;
+        i++;
+    }
+    void editContact() {
+        Scanner sc2 = new Scanner(System.in);
+        System.out.println("Enter the person name whose detail you want to edit");
+        String uname = sc2.next();
+        int result = getUserDateDate(uname);
+        if (result == 1) {
+            System.out.println("Choose\n1:Last Name\n2:Phone Number\n3:city");
+            int editChoice = sc2.nextInt();
+            switch (editChoice) {
+                case 1:
+                    System.out.println(contactList[i]);
+                    System.out.println("Enter the new lastname");
+                    String newLastName = sc2.next();
+                    contactList[i].setLastname(newLastName);
+                    break;
+
+                case 2:
+                    System.out.println("Enter the new phone Number");
+                    long newPhoneNumber = sc2.nextLong();
+                    contactList[i].setPhoneNo(newPhoneNumber);
+                    break;
+                case 3:
+                    System.out.println("Enter the new city");
+                    String newCity = sc2.next();
+                    contactList[i].setCity(newCity);
+                    break;
+                default:
+                    System.out.println("Wrong Choice of Edit");
+
+            }
+        }
+
+    }
+    private int getUserDateDate(String uname){
+        for (int i = 0; i < contactList.length; i++){
+            if (contactList[i].getFirstname().equals(uname));
+            return 1;
+        }
+        return 0;
     }
 
     public void printContacts() {
         for (int j = 0; j < contactList.length; j++) {
-            System.out.println(contactList[0]);
+            if (contactList[j] == null)
+                break;
+            System.out.println(contactList[j]);
         }
     }
 }
