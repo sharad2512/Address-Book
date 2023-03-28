@@ -1,10 +1,16 @@
 package com.addressbook;
 import java.util.Scanner;
-public class AddressBook {
-    private final int NUM_OF_PEOPLE = 5;//declare operation
-    Scanner scannerObject = new Scanner(System.in);//input
-    ContactPerson[]contactList = new ContactPerson[NUM_OF_PEOPLE];//arry to no of1 person datail
-    public static int numberOfEntries = 0;//intilizing
+public class AddressBook implements AddressBookIF{
+    private final int NUM_OF_PEOPLE = 5;
+    public static int numberOfEntries = 0;
+    public String addressBookName;
+    Scanner scannerObject = new Scanner(System.in);
+    ContactPerson[]contactList = new ContactPerson[NUM_OF_PEOPLE];
+    public String getAddressBookName() {
+        return addressBookName;
+    }public void setAddressBookName(String addressBookName) {
+        this.addressBookName = addressBookName;
+    }
 
     public void operation() {
 
@@ -30,8 +36,6 @@ public class AddressBook {
                 case 5:
                     moreChanges = false;
                     System.out.println("BYE !");
-
-
             }
 
         }while(moreChanges);
@@ -107,7 +111,7 @@ public class AddressBook {
 
                 Address address = person.getAddress();
                 System.out.println("\nChoose the attribute you want to change:");
-                System.out.println("1.First Name\n2.Last Name\n3.Phone Number\n4.Email\n5.City\n6.State\n7.ZipCode");
+                System.out.println("1.Last Name\n2.Phone Number\n3.Email\n4.City\n5.State\n6.ZipCode");
                 int choice = scannerObject.nextInt();
 
                 switch(choice) {
@@ -171,12 +175,17 @@ public class AddressBook {
     }
 
     public void displayContents() {
-        System.out.println("----- Contents of the Address Book -----");
+        System.out.println("----- Contents of the Address Book : "+addressBookName+" -----");
         for(int index=0; index < numberOfEntries ; index++) {
             System.out.println(contactList[index]);
 
         }
         System.out.println("-----------------------------------------");
+
+    }
+
+    public String toString() {
+        return addressBookName;
 
     }
 
