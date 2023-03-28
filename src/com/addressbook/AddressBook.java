@@ -1,27 +1,30 @@
 package com.addressbook;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 public class AddressBook implements AddressBookIF{
     Scanner scannerObject = new Scanner(System.in);
-    Map<String, ContactPerson> contactList = new HashMap<String,ContactPerson>();
-    public static String addressBookName;
-    boolean isPresent = false;
+    Map<String, ContactPerson> contactList = new HashMap<>();
+    public String addressBookName;
+    public boolean isPresent = false;
 
     public String getAddressBookName() {
         return addressBookName;
     }
-    public static void setAddressBookName(String addressBookName) {
-        AddressBook.addressBookName = addressBookName;
+    public void setAddressBookName(String addressBookName) {
+        this.addressBookName = addressBookName;
+    }
+    public ArrayList<ContactPerson> getContact() {
+        return new ArrayList<ContactPerson>(contactList.values());
     }
     public void operation() {
-
         boolean moreChanges = true;
         do {
+
             System.out.println("\nChoose the operation you want to perform");
             System.out.println(
                     "1.Add To Address Book\n2.Edit Existing Entry\n3.Display Address book\n4.Delete Contact\n5.Exit Address book System");
-
             switch (scannerObject.nextInt()) {
                 case 1:
                     addContact();
@@ -55,7 +58,6 @@ public class AddressBook implements AddressBookIF{
                 return;
             }
         });
-
         if(isPresent == false) {
             System.out.println("Enter Last Name: ");
             String lastName = scannerObject.next();
@@ -88,13 +90,12 @@ public class AddressBook implements AddressBookIF{
         }
     }
     public void editPerson() {
+
         ContactPerson person = new ContactPerson();
         System.out.println("Enter the first name:");
         String firstName = scannerObject.next();
-
         if(contactList.containsKey(firstName)) {
             person = contactList.get(firstName);
-
             Address address = person.getAddress();
             System.out.println("\nChoose the attribute you want to change:");
             System.out.println("1.Last Name\n2.Phone Number\n3.Email\n4.City\n5.State\n6.ZipCode");
@@ -149,6 +150,7 @@ public class AddressBook implements AddressBookIF{
         }
     }
     public void displayContents() {
+
         System.out.println("----- Contents of the Address Book "+this.getAddressBookName()+" -----");
         for (String eachContact : contactList.keySet()) {
             ContactPerson person = contactList.get(eachContact);

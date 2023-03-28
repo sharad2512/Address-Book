@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class AddressBookMain {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+         Scanner scannerObject = new Scanner(System.in);
         System.out.println("---------- Welcome To Address Book Program!! ----------");
 
         AddressBookDirectory addressBookDirectory = new AddressBookDirectory();
