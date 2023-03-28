@@ -25,7 +25,6 @@ public class AddressBookMain {
                 case 4:
                     addressBook.deleteContact();
                     break;
-
             }
             System.out.println("Press 'y' to continue else press 'n'");
             choice = sc.next().charAt(0);
