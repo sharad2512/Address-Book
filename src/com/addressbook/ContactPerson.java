@@ -47,7 +47,7 @@ public class ContactPerson {
 
     public String toString() {
 
-        return "Person Details:\nFirst Name - "+firstName+"\nLast Name - "+lastName+"\nPhone Number - "+phoneNumber+"\nEmail - "+email+"\nAddress - "+address;
+        return "Person Details:\nFirst Name - " + firstName + "\nLast Name - " + lastName + "\nPhone Number - " + phoneNumber + "\nEmail - " + email + "\nAddress - " + address;
 
     }
 }

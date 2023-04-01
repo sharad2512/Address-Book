@@ -8,13 +8,14 @@ import java.util.Scanner;
 public class AddressBookDirectory implements AddressBookDirectoryIF{
     public AddressBook addressBook;
     Scanner scannerObject = new Scanner(System.in);
-    Map<String, AddressBook> addressBookDirectory = new HashMap<String, AddressBook>();
+    Map<String,AddressBook> addressBookDirectory = new HashMap<String,AddressBook>();
+
     public void operationDirectory() {
         boolean moreChanges = true;
         do {
             System.out.println("\nChoose the operation on the Directory you want to perform");
             System.out.println(
-                    "1.Add an Address Book\n2.Edit Existing Address Book\n3.Search Person By City\n4.Search Person By State\n5.View By City\n6.View By State\n7.Display Address book Directory\n8.Exit Address book System");
+                    "1.Add an Address Book\n2.Edit Existing Address Book\n3.Search Person By Region\n4.View People By Region\n5.Count People By Region\n6.Display Address book Directory\n7.Exit Address book System");
 
             switch (scannerObject.nextInt()) {
                 case 1:
@@ -24,24 +25,35 @@ public class AddressBookDirectory implements AddressBookDirectoryIF{
                     break;
                 case 2:
                     editAddressBook();
-                    AddressBook addressBook2=new AddressBook();
                     break;
                 case 3:
-                    searchByCity();
+                    System.out.println("Enter \n1.Search By City\n2.Search By State");
+                    int searChoice = scannerObject.nextInt();
+                    if(searChoice==1)
+                        searchByCity();
+                    else
+                        searchByState();
                     break;
                 case 4:
-                    searchByState();
+                    System.out.println("Enter \n1.Display By City\n2.Display By State");
+                    int displayChoice = scannerObject.nextInt();
+                    if(displayChoice==1)
+                        displayPeopleByRegion(AddressBook.personByCity);
+                    else
+                        displayPeopleByRegion(AddressBook.personByState);
                     break;
                 case 5:
-                    displayPeopleByRegion(AddressBook.personByCity);
+                    System.out.println("Enter \n1.Display By City\n2.Display By State");
+                    int countChoice = scannerObject.nextInt();
+                    if(countChoice==1)
+                        countPeopleByRegion(AddressBook.personByCity);
+                    else
+                        countPeopleByRegion(AddressBook.personByState);
                     break;
                 case 6:
-                    displayPeopleByRegion(AddressBook.personByState);
-                    break;
-                case 7:
                     displayDirectoryContents();
                     break;
-                case 8:
+                case 7:
                     moreChanges = false;
                     System.out.println("Exiting Address Book Directory !");
             }
@@ -50,8 +62,7 @@ public class AddressBookDirectory implements AddressBookDirectoryIF{
     public void addAddressBook() {
         System.out.println("Enter the name of the Address Book you want to add");
         String bookNameToAdd = scannerObject.next();
-
-        if (addressBookDirectory.containsKey(bookNameToAdd)) {
+        if(addressBookDirectory.containsKey(bookNameToAdd)) {
             System.out.println("Book Name Already Exists");
             return;
         }
@@ -63,12 +74,11 @@ public class AddressBookDirectory implements AddressBookDirectoryIF{
         System.out.println("Enter the Name of the Address Book which you want to edit:");
         String addressBookToEdit = scannerObject.next();
 
-        if (addressBookDirectory.containsKey(addressBookToEdit)) {
+        if(addressBookDirectory.containsKey(addressBookToEdit)) {
             addressBook = addressBookDirectory.get(addressBookToEdit);
-            AddressBook addressBook2 =new AddressBook();
-            addressBook2.editPerson();
             addressBook.operation();
-        } else {
+        }
+        else {
             System.out.println("Book Does Not Exist");
         }
     }
@@ -78,51 +88,53 @@ public class AddressBookDirectory implements AddressBookDirectoryIF{
         System.out.println("Enter the name of the Person : ");
         String personName = scannerObject.next();
 
-        for (AddressBook addressBook : addressBookDirectory.values()) {
-            for (ContactPerson person : addressBook.getContact()) {
-                if (person.getFirstName().equals(personName) && person.getAddress().getCity().equals(cityName)) {
-                    System.out.println(personName + " Found in Address Book : " + addressBook.getAddressBookName() + " !");
-                    System.out.println(person);
-                    return;
-                }
-            }
+        for(AddressBook addressBook : addressBookDirectory.values()) {
+            ArrayList<ContactPerson> contactList = addressBook.getContact();
+            contactList.stream()
+                    .filter(person -> person.getFirstName().equals(personName) && person.getAddress().getCity().equals(cityName))
+                    .forEach(person -> System.out.println(person));
         }
-        System.out.println("Contact Does Not Exist !!");
     }
     public void searchByState() {
         System.out.println("Enter the name of the State where the Person resides : ");
-        String StateName = scannerObject.next();
+        String stateName = scannerObject.next();
         System.out.println("Enter the name of the Person : ");
         String personName = scannerObject.next();
 
-        for (AddressBook addressBook : addressBookDirectory.values()) {
-            for (ContactPerson person : addressBook.getContact()) {
-                if (person.getFirstName().equals(personName) && person.getAddress().getState().equals(StateName)) {
-                    System.out.println(personName + " Found in Book : " + addressBook.getAddressBookName() + " !");
-                    System.out.println(person);
-                    return;
-                }
-            }
+        for(AddressBook addressBook : addressBookDirectory.values()) {
+            ArrayList<ContactPerson> contactList = ((AddressBook) addressBook).getContact();
+            contactList.stream()
+                    .filter(person -> person.getFirstName().equals(personName) && person.getAddress().getState().equals(stateName))
+                    .forEach(person -> System.out.println(person));
         }
-        System.out.println("Contact Does Not Exist !!");
     }
     public void displayPeopleByRegion(HashMap<String, ArrayList<ContactPerson>> listToDisplay) {
-        ArrayList<ContactPerson> list;
-        for (String name : listToDisplay.keySet()) {
-            System.out.println("People residing in: " + name);
-            list = listToDisplay.get(name);
-            for (ContactPerson contact : list) {
-                System.out.println(contact);
-            }
-        }
+        System.out.println("Enter the name of the region :");
+        String regionName = scannerObject.next();
+
+        listToDisplay.values().stream()
+                .map(region -> region.stream()
+                        .filter(person -> person.getAddress().getState().equals(regionName) || person.getAddress().getCity().equals(regionName)))
+                .forEach(person -> person.forEach(personDetails -> System.out.println(personDetails)));
+    }
+    public void countPeopleByRegion(HashMap<String, ArrayList<ContactPerson>> listToDisplay) {
+        System.out.println("Enter the name of the region :");
+        String regionName = scannerObject.next();
+
+        long countPeople = listToDisplay.values().stream()
+                .map(region -> region.stream()
+                        .filter(person -> person.getAddress().getState().equals(regionName) || person.getAddress().getCity().equals(regionName)))
+                .count();
+        System.out.println("Number of People residing in " + regionName+" are: "+countPeople+"\n");
     }
     public void displayDirectoryContents() {
         System.out.println("----- Contents of the Address Book Directory-----");
         for (String eachBookName : addressBookDirectory.keySet()) {
 
             System.out.println(eachBookName);
+            AddressBook addressBook1=new AddressBook();
+            addressBook1.displayContents();
         }
         System.out.println("-----------------------------------------");
     }
-
 }
