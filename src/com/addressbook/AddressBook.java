@@ -25,7 +25,8 @@ public class AddressBook implements AddressBookIF{
         do {
             System.out.println("\nChoose the operation you want to perform");
             System.out.println(
-                    "1.Add To Address Book\n2.Edit Existing Entry\n3.Display Address book\n4.Delete Contact\n5.Exit Address book System");
+                    "1.Add To Address Book\n2.Edit Existing Entry\n3.Delete Contact\n4.Display Address book\n5.Display Sorted Address Book\n6.Exit Address book System");
+
             switch (scannerObject.nextInt()) {
                 case 1:
                     addContact();
@@ -34,12 +35,15 @@ public class AddressBook implements AddressBookIF{
                     editPerson();
                     break;
                 case 3:
-                    displayContents();
-                    break;
-                case 4:
                     deletePerson();
                     break;
-                case 5:
+                case 4:
+                    displayContents();
+                    break;
+                case 5 :
+                    sortAddressBook();
+                    break;
+                case 6:
                     moreChanges = false;
                     System.out.println("Exiting Address Book: "+this.getAddressBookName()+" !");
             }
@@ -113,9 +117,9 @@ public class AddressBook implements AddressBookIF{
     }
     public void editPerson() {
         ContactPerson person = new ContactPerson();
-
         System.out.println("Enter the first name:");
         String firstName = scannerObject.next();
+
         if(contactList.containsKey(firstName)) {
             person = contactList.get(firstName);
 
@@ -162,6 +166,7 @@ public class AddressBook implements AddressBookIF{
         }
     }
     public void deletePerson() {
+
         System.out.println("Enter the first name of the person to be deleted");
         String firstName = scannerObject.next();
         if(contactList.containsKey(firstName)) {
@@ -177,6 +182,20 @@ public class AddressBook implements AddressBookIF{
         for (String eachContact : contactList.keySet()) {
             ContactPerson person = contactList.get(eachContact);
             System.out.println(person);
+        }
+        System.out.println("-----------------------------------------");
+    }
+    public void sortAddressBook() {
+
+        List<ContactPerson> sortedContactList = contactList.values().stream()
+                .sorted((firstperson, secondperson) -> firstperson.getFirstName().compareTo(secondperson.getFirstName()))
+                .collect(Collectors.toList());
+
+        System.out.println("------ Sorted Address Book "+this.getAddressBookName()+" ------");
+        Iterator iterator = sortedContactList.iterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+            System.out.println();
         }
         System.out.println("-----------------------------------------");
     }
